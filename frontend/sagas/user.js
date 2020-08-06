@@ -1,27 +1,38 @@
 import { all, fork, put, call, delay, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
+import {
+  LOG_IN_REQUEST,
+  LOG_IN_SUCCESS,
+  LOG_IN_FAILURE,
+  LOG_OUT_REQUEST,
+  LOG_OUT_SUCCESS,
+  LOG_OUT_FAILURE,
+  SIGN_UP_REQUEST,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
+} from '../reducers/user';
 
 // LOGIN
-function logInAPI(payload) {
-  return axios.post('/api/login', payload);
+function logInAPI(data) {
+  return axios.post('/api/login', data);
 }
 function* logIn(action) {
   try {
-    // const result = yield call(logInAPI, action.payload);
+    // const result = yield call(logInAPI, action.data);
     yield delay(1000);
     yield put({
-      type: 'LOG_IN_SUCCESS',
-      payload: action.payload,
+      type: LOG_IN_SUCCESS,
+      data: action.data,
     });
-  } catch (err) {
+  } catch (error) {
     yield put({
-      type: 'LOG_IN_FAILURE',
-      payload: err.response.data,
+      type: LOG_IN_FAILURE,
+      error: error.response.data,
     });
   }
 }
 function* watchLogIn() {
-  yield takeLatest('LOG_IN_REQUEST', logIn);
+  yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
 // LOGOUT
@@ -33,19 +44,41 @@ function* logOut() {
     // const result = yield call(logOutAPI);
     yield delay(1000);
     yield put({
-      type: 'LOG_OUT_SUCCESS',
+      type: LOG_OUT_SUCCESS,
     });
-  } catch (err) {
+  } catch (error) {
     yield put({
-      type: 'LOG_OUT_FAILURE',
-      payload: err.response.data,
+      type: LOG_OUT_FAILURE,
+      error: error.response.data,
     });
   }
 }
 function* watchLogOut() {
-  yield takeLatest('LOG_OUT_REQUEST', logOut);
+  yield takeLatest(LOG_OUT_REQUEST, logOut);
+}
+
+// SIGN UP
+function signUpAPI() {
+  return axios.post('/api/signup');
+}
+function* signUp() {
+  try {
+    // const result = yield call(signUpAPI);
+    yield delay(1000);
+    yield put({
+      type: SIGN_UP_SUCCESS,
+    });
+  } catch (error) {
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+function* watchSignUp() {
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
 export default function* userSaga() {
-  yield all([fork(watchLogIn), fork(watchLogOut)]);
+  yield all([fork(watchLogIn), fork(watchLogOut), fork(watchSignUp)]);
 }
