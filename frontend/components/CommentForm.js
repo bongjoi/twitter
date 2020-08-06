@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
+import { ADD_COMMENT_REQUEST } from '../reducers/post';
 
 const FormItem = styled(Form.Item)`
   position: relative;
@@ -17,13 +18,22 @@ const CommentButton = styled(Button)`
   z-index: 1;
 `;
 
-const CommentForm = ({ postId }) => {
-  const [commentText, onChangeCommentText] = useInput('');
+const CommentForm = ({ post }) => {
+  const [commentText, onChangeCommentText, setCommentText] = useInput('');
   const id = useSelector((state) => state.user.me?.id);
+  const { addCommentDone } = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setCommentText('');
+  }, [addCommentDone]);
 
   const onSubmitComment = useCallback(() => {
-    console.log(postId, commentText);
-  }, [commentText]);
+    dispatch({
+      type: ADD_COMMENT_REQUEST,
+      data: { content: commentText, postId: post.id, userId: id },
+    });
+  }, [commentText, id]);
 
   return (
     <Form onFinish={onSubmitComment}>
@@ -42,7 +52,7 @@ const CommentForm = ({ postId }) => {
 };
 
 CommentForm.propTypes = {
-  postId: PropTypes.number.isRequired,
+  post: PropTypes.object.isRequired,
 };
 
 export default CommentForm;

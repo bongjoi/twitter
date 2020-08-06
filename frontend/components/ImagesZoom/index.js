@@ -29,7 +29,8 @@ const ImagesZoom = ({ images, onClose }) => {
             infinite
             arrows={false}
             slidesToShow={1}
-            slidesToScroll={1}>
+            slidesToScroll={1}
+          >
             {images.map((image) => (
               <ImageWrapper key={image.src}>
                 <img src={image.src} alt={image.src} />

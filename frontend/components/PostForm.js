@@ -1,8 +1,9 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
-import { addPost } from '../reducers/post';
+import { addPostRequestAction } from '../reducers/post';
+import useInput from '../hooks/useInput';
 
 const StyledForm = styled(Form)`
   margin: 10px 0 20px;
@@ -21,25 +22,27 @@ const ImagePreview = styled.img`
 `;
 
 const PostForm = () => {
-  const [text, setText] = useState('');
-  const { imagePaths } = useSelector(({ post }) => ({
+  const [text, onChangeText, setText] = useInput('');
+  const { imagePaths, addPostDone } = useSelector(({ post }) => ({
     imagePaths: post.imagePaths,
   }));
   const dispatch = useDispatch();
   const imageInput = useRef();
 
-  const onChangeText = useCallback((e) => {
-    setText(e.target.value);
-  }, []);
+  // 포스트 추가가 완료되면 포스트 내용 초기화
+  useEffect(() => {
+    if (addPostDone) {
+      setText('');
+    }
+  }, [addPostDone]);
 
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, []);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPost);
-    setText('');
-  }, []);
+    dispatch(addPostRequestAction(text));
+  }, [text]);
 
   return (
     <StyledForm encType="multipart/form-data" onFinish={onSubmit}>
