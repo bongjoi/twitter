@@ -5,7 +5,7 @@ import { Form, Input, Checkbox, Button } from 'antd';
 import styled from 'styled-components';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
-import { SIGN_UP_REQUEST } from '../reducers/user';
+import { signUpAction } from '../reducers/user';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -49,10 +49,7 @@ const Signup = () => {
       return;
     }
     console.log(email, nickname, password);
-    dispatch({
-      type: SIGN_UP_REQUEST,
-      data: { email, nickname, password },
-    });
+    dispatch(signUpAction({ email, nickname, password }));
   }, [password, passwordConfirm, term]);
 
   return (
@@ -65,23 +62,12 @@ const Signup = () => {
           <div>
             <label htmlFor="user-email">이메일</label>
             <br />
-            <Input
-              type="email"
-              name="user-email"
-              value={email}
-              required
-              onChange={onChangeEmail}
-            />
+            <Input type="email" name="user-email" value={email} required onChange={onChangeEmail} />
           </div>
           <div>
             <label htmlFor="user-nickname">닉네임</label>
             <br />
-            <Input
-              name="user-nickname"
-              value={nickname}
-              required
-              onChange={onChangeNickname}
-            />
+            <Input name="user-nickname" value={nickname} required onChange={onChangeNickname} />
           </div>
           <div>
             <label htmlFor="user-password">비밀번호</label>
@@ -104,17 +90,13 @@ const Signup = () => {
               required
               onChange={onChangePasswordConfirm}
             />
-            {passwordError && (
-              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-            )}
+            {passwordError && <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>}
           </div>
           <div>
             <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
               약관에 동의합니다.
             </Checkbox>
-            {termError && (
-              <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>
-            )}
+            {termError && <ErrorMessage>약관에 동의하셔야 합니다.</ErrorMessage>}
           </div>
           <ButtonWrapper>
             <Button type="primary" htmlType="submit" loading={signUpLoading}>

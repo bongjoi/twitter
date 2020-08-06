@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { ADD_COMMENT_REQUEST } from '../reducers/post';
+import { addCommentAction } from '../reducers/post';
 
 const FormItem = styled(Form.Item)`
   position: relative;
@@ -21,7 +21,7 @@ const CommentButton = styled(Button)`
 const CommentForm = ({ post }) => {
   const [commentText, onChangeCommentText, setCommentText] = useInput('');
   const id = useSelector((state) => state.user.me?.id);
-  const { addCommentDone } = useSelector((state) => state.post);
+  const { addCommentDone, addCommentLoading } = useSelector((state) => state.post);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,21 +29,16 @@ const CommentForm = ({ post }) => {
   }, [addCommentDone]);
 
   const onSubmitComment = useCallback(() => {
-    dispatch({
-      type: ADD_COMMENT_REQUEST,
-      data: { content: commentText, postId: post.id, userId: id },
-    });
+    if (commentText) {
+      dispatch(addCommentAction({ content: commentText, postId: post.id, userId: id }));
+    }
   }, [commentText, id]);
 
   return (
     <Form onFinish={onSubmitComment}>
       <FormItem>
-        <Input.TextArea
-          value={commentText}
-          onChange={onChangeCommentText}
-          rows={4}
-        />
-        <CommentButton type="primary" htmlType="submit">
+        <Input.TextArea value={commentText} onChange={onChangeCommentText} rows={4} />
+        <CommentButton type="primary" htmlType="submit" loading={addCommentLoading}>
           게시
         </CommentButton>
       </FormItem>

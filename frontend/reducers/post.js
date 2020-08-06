@@ -1,3 +1,5 @@
+import shortId from 'shortid';
+
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
@@ -5,11 +7,11 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
-export const addPostRequestAction = (data) => ({
+export const addPostAction = (data) => ({
   type: ADD_POST_REQUEST,
   data,
 });
-export const addCommentRequestAction = (data) => ({
+export const addCommentAction = (data) => ({
   type: ADD_COMMENT_REQUEST,
   data,
 });
@@ -25,16 +27,13 @@ export const initialState = {
       content: '첫 번째 게시글 #해시태그 #익스프레스',
       Images: [
         {
-          src:
-            'https://cdn.pixabay.com/photo/2020/07/22/12/08/cats-eyes-5428855_1280.jpg',
+          src: 'https://cdn.pixabay.com/photo/2020/07/22/12/08/cats-eyes-5428855_1280.jpg',
         },
         {
-          src:
-            'https://cdn.pixabay.com/photo/2020/07/02/07/06/goldcrest-5361996_1280.jpg',
+          src: 'https://cdn.pixabay.com/photo/2020/07/02/07/06/goldcrest-5361996_1280.jpg',
         },
         {
-          src:
-            'https://cdn.pixabay.com/photo/2020/06/20/01/24/frog-5319326_1280.jpg',
+          src: 'https://cdn.pixabay.com/photo/2020/06/20/01/24/frog-5319326_1280.jpg',
         },
       ],
       Comments: [
@@ -62,16 +61,25 @@ export const initialState = {
   addCommentError: null,
 };
 
-const dummyPost = {
-  id: 2,
-  content: 'dummy data',
+const dummyPost = (data) => ({
+  id: shortId.generate(),
+  content: data,
   User: {
     id: 1,
     nickname: 'bongjoi',
   },
   Images: [],
   Comments: [],
-};
+});
+
+const dummyComment = (userId, data) => ({
+  id: shortId.generate(),
+  content: data,
+  User: {
+    id: userId,
+    nickname: 'bongjoi',
+  },
+});
 
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -85,7 +93,7 @@ const postReducer = (state = initialState, action) => {
     case ADD_POST_SUCCESS:
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [dummyPost(action.data), ...state.mainPosts],
         addPostLoading: false,
         addPostDone: true,
       };
@@ -102,12 +110,19 @@ const postReducer = (state = initialState, action) => {
         addCommentDone: false,
         addCommentError: null,
       };
-    case ADD_COMMENT_SUCCESS:
+    case ADD_COMMENT_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+      const post = state.mainPosts[postIndex];
+      const Comments = [dummyComment(action.data.userId, action.data.content), ...post.Comments];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Comments };
       return {
         ...state,
+        mainPosts,
         addCommentLoading: false,
         addCommentDone: true,
       };
+    }
     case ADD_COMMENT_FAILURE:
       return {
         ...state,

@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
-import { addPostRequestAction } from '../reducers/post';
+import { addPostAction } from '../reducers/post';
 import useInput from '../hooks/useInput';
 
 const StyledForm = styled(Form)`
@@ -23,9 +23,7 @@ const ImagePreview = styled.img`
 
 const PostForm = () => {
   const [text, onChangeText, setText] = useInput('');
-  const { imagePaths, addPostDone } = useSelector(({ post }) => ({
-    imagePaths: post.imagePaths,
-  }));
+  const { imagePaths, addPostDone, addPostLoading } = useSelector((state) => state.post);
   const dispatch = useDispatch();
   const imageInput = useRef();
 
@@ -41,7 +39,7 @@ const PostForm = () => {
   }, []);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPostRequestAction(text));
+    dispatch(addPostAction(text));
   }, [text]);
 
   return (
@@ -55,7 +53,7 @@ const PostForm = () => {
       <div>
         <input type="file" multiple hidden ref={imageInput} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <StyledButton type="primary" htmlType="submit">
+        <StyledButton type="primary" htmlType="submit" loading={addPostLoading}>
           트윗
         </StyledButton>
       </div>

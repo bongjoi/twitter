@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { loginRequestAction } from '../reducers/user';
+import { logInAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -21,7 +21,7 @@ const LoginForm = () => {
   const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(() => {
-    dispatch(loginRequestAction({ email, password }));
+    dispatch(logInAction({ email, password }));
   }, [email, password]);
 
   return (
@@ -29,13 +29,7 @@ const LoginForm = () => {
       <div>
         <label htmlFor="user-email">이메일</label>
         <br />
-        <Input
-          type="email"
-          name="user-email"
-          value={email}
-          onChange={onChangeEmail}
-          required
-        />
+        <Input type="email" name="user-email" value={email} onChange={onChangeEmail} required />
       </div>
       <div>
         <label htmlFor="user-password">비밀번호</label>
