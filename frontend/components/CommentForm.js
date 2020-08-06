@@ -12,7 +12,7 @@ const FormItem = styled(Form.Item)`
 `;
 
 const CommentButton = styled(Button)`
-  position: absolute;
+  position: absolute !important;
   bottom: -40px;
   right: 0;
   z-index: 1;
