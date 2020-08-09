@@ -27,6 +27,7 @@
     "linebreak-style": "off",
     "no-param-reassign": "off",
     "arrow-body-style": "off",
-    "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }]
+    "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
+    "implicit-arrow-linebreak": "off"
   }
 }

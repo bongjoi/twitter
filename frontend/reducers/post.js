@@ -2,6 +2,9 @@ import shortId from 'shortid';
 import produce from 'immer';
 import faker from 'faker';
 
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
@@ -22,49 +25,12 @@ export const addCommentAction = (data) => ({
 });
 
 export const initialState = {
-  mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: 'bongjoi',
-      },
-      content: '첫 번째 게시글 #해시태그 #익스프레스',
-      Images: [
-        {
-          id: shortId.generate(),
-          src: 'https://cdn.pixabay.com/photo/2020/07/22/12/08/cats-eyes-5428855_1280.jpg',
-        },
-        {
-          id: shortId.generate(),
-          src: 'https://cdn.pixabay.com/photo/2020/07/02/07/06/goldcrest-5361996_1280.jpg',
-        },
-        {
-          id: shortId.generate(),
-          src: 'https://cdn.pixabay.com/photo/2020/06/20/01/24/frog-5319326_1280.jpg',
-        },
-      ],
-      Comments: [
-        {
-          id: shortId.generate(),
-          User: {
-            id: shortId.generate(),
-            nickname: 'socute',
-          },
-          content: '너무 귀엽네요 ~!',
-        },
-        {
-          id: shortId.generate(),
-          User: {
-            id: shortId.generate(),
-            nickname: 'fantastic',
-          },
-          content: '눈정화 하고 갑니다',
-        },
-      ],
-    },
-  ],
+  mainPosts: [],
   imagePaths: [],
+  hasMorePosts: true,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -76,8 +42,8 @@ export const initialState = {
   removePostError: null,
 };
 
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20)
+export const generateDummyPosts = (number) =>
+  Array(number)
     .fill()
     .map(() => ({
       id: shortId.generate(),
@@ -100,8 +66,7 @@ initialState.mainPosts = initialState.mainPosts.concat(
           content: faker.lorem.sentence(),
         },
       ],
-    })),
-);
+    }));
 
 const dummyPost = (data) => ({
   id: data.id,
@@ -125,6 +90,21 @@ const dummyComment = (userId, data) => ({
 
 const postReducer = produce((draft, action) => {
   switch (action.type) {
+    case LOAD_POSTS_REQUEST:
+      draft.loadPostsLoading = true;
+      draft.loadPostsDone = false;
+      draft.loadPostsError = null;
+      break;
+    case LOAD_POSTS_SUCCESS:
+      draft.loadPostsLoading = false;
+      draft.loadPostsDone = true;
+      draft.mainPosts = action.data.concat(draft.mainPosts);
+      draft.hasMorePosts = draft.mainPosts.length < 50;
+      break;
+    case LOAD_POSTS_FAILURE:
+      draft.loadPostsLoading = false;
+      draft.loadPostsError = action.error;
+      break;
     case ADD_POST_REQUEST:
       draft.addPostLoading = true;
       draft.addPostDone = false;
