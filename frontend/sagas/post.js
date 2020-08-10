@@ -38,7 +38,7 @@ function* loadPosts(action) {
   }
 }
 function* watchLoadPosts() {
-  yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
+  yield throttle(3000, LOAD_POSTS_REQUEST, loadPosts);
 }
 
 // ADD POST
