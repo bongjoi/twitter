@@ -66,15 +66,14 @@ function* watchFollow() {
 
 // LOGIN
 function logInAPI(data) {
-  return axios.post('/api/login', data);
+  return axios.post('/user/login', data);
 }
 function* logIn(action) {
   try {
-    // const result = yield call(logInAPI, action.data);
-    yield delay(1000);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (error) {
     yield put({
@@ -89,7 +88,7 @@ function* watchLogIn() {
 
 // LOGOUT
 function logOutAPI() {
-  return axios.post('/api/login');
+  return axios.post('/user/logout');
 }
 function* logOut() {
   try {
@@ -111,7 +110,7 @@ function* watchLogOut() {
 
 // SIGN UP
 function signUpAPI(data) {
-  return axios.post('http://localhost:4000/user', data);
+  return axios.post('/user', data);
 }
 function* signUp(action) {
   try {

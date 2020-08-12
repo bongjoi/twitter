@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./models');
+const passportConfig = require('./passport');
 
 const app = express();
 
@@ -10,6 +11,8 @@ db.sequelize
     console.log('db 연결 성공');
   })
   .catch(console.error);
+
+passportConfig();
 
 app.use(
   cors({
