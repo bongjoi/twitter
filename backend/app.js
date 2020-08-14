@@ -4,6 +4,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
 const db = require('./models');
 const passportConfig = require('./passport');
 
@@ -20,6 +21,7 @@ db.sequelize
 
 passportConfig();
 
+app.use(morgan('dev'));
 app.use(
   cors({
     origin: 'http://localhost:3000',
@@ -41,6 +43,7 @@ app.use(passport.session());
 
 // Routes
 app.use('/post', require('./routes/post'));
+app.use('/posts', require('./routes/posts'));
 app.use('/user', require('./routes/user'));
 
 app.listen(4000, () => {
