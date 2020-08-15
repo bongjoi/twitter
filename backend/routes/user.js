@@ -34,7 +34,7 @@ router.get('/', async (req, res, next) => {
       });
       return res.status(200).json(fullUserWithoutPassword);
     } else {
-      res.status(200).json(null);
+      res.status(204).end();
     }
   } catch (error) {
     console.error(error);
@@ -115,7 +115,26 @@ router.post('/', isNotLoggedIn, async (req, res, next) => {
 router.post('/logout', isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
-  res.send('ok');
+  res.status(204).end();
+});
+
+// PATCH /user/nickname
+// 닉네임 수정
+router.patch('/nickname', isLoggedIn, async (req, res, next) => {
+  try {
+    await User.update(
+      {
+        nickname: req.body.nickname,
+      },
+      {
+        where: { id: req.user.id },
+      },
+    );
+    res.status(200).json({ nickname: req.body.nickname });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 module.exports = router;

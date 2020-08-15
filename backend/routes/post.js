@@ -77,7 +77,7 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
 
 // PATCH /post/:postId/like
 // 좋아요 활성화
-router.patch('/:postId/like', async (req, res, next) => {
+router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({ whrere: { id: req.params.postId } });
     if (!post) {
@@ -93,7 +93,7 @@ router.patch('/:postId/like', async (req, res, next) => {
 
 // DELETE /post/:postId/like
 // 좋아요 비활성화
-router.delete('/:postId/like', async (req, res, next) => {
+router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
     const post = await Post.findOne({ whrere: { id: req.params.postId } });
     if (!post) {
@@ -101,6 +101,23 @@ router.delete('/:postId/like', async (req, res, next) => {
     }
     await post.removeLikers(req.user.id);
     res.status(200).json({ PostId: post.id, UserId: req.user.id });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// DELETE /post/:postId
+// 게시글 삭제
+router.delete('/:postId', isLoggedIn, async (req, res, next) => {
+  try {
+    await Post.destroy({
+      where: {
+        id: req.params.postId,
+        UserId: req.user.id,
+      },
+    });
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10) });
   } catch (error) {
     console.error(error);
     next(error);

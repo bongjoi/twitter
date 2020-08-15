@@ -25,7 +25,6 @@ const PostCard = ({ post }) => {
   const { removePostLoading } = useSelector((state) => state.post);
   const dispatch = useDispatch();
   const [toggleComment, setToggleComment] = useState(false);
-  const liked = post.Likers.find((v) => v.id === id);
 
   const onLike = useCallback(() => {
     dispatch({
@@ -51,6 +50,8 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, []);
+
+  const liked = post.Likers.find((v) => v.id === id);
 
   return (
     <PostCardBlock>
