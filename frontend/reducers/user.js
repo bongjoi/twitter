@@ -1,5 +1,8 @@
 import produce from 'immer';
 
+export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
+export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 export const FOLLOW_REQUEST = 'FOLLOW_REQUEST';
 export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
 export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
@@ -21,22 +24,10 @@ export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_FROM_ME = 'REMOVE_POST_FROM_ME';
 
-export const logInAction = (data) => ({
-  type: LOG_IN_REQUEST,
-  data,
-});
-export const logOutAction = () => ({
-  type: LOG_OUT_REQUEST,
-});
-export const signUpAction = (data) => ({
-  type: SIGN_UP_REQUEST,
-  data,
-});
-export const changeNicknameAction = () => ({
-  type: CHANGE_NICKNAME_REQUEST,
-});
-
 export const initialState = {
+  loadMyInfoLoading: false,
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
   followLoading: false,
   followDone: false,
   followError: null,
@@ -60,17 +51,22 @@ export const initialState = {
   loginData: {},
 };
 
-const dummyUser = (data) => ({
-  ...data,
-  id: 1,
-  nickname: 'bongjoi',
-  Posts: [{ id: 1 }],
-  Followings: [{ nickname: '가나다' }, { nickname: '라마바' }, { nickname: '사아자' }],
-  Followers: [{ nickname: '가나다' }, { nickname: '라마바' }, { nickname: '사아자' }],
-});
-
 const userReducer = produce((draft, action) => {
   switch (action.type) {
+    case LOAD_MY_INFO_REQUEST:
+      draft.loadMyInfoLoading = true;
+      draft.loadMyInfoDone = false;
+      draft.loadMyInfoError = null;
+      break;
+    case LOAD_MY_INFO_SUCCESS:
+      draft.loadMyInfoLoading = false;
+      draft.loadMyInfoDone = true;
+      draft.me = action.data;
+      break;
+    case LOAD_MY_INFO_FAILURE:
+      draft.loadMyInfoLoading = false;
+      draft.loadMyInfoError = action.error;
+      break;
     case FOLLOW_REQUEST:
       draft.followLoading = true;
       draft.followDone = false;

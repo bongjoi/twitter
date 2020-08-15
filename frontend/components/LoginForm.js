@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { logInAction } from '../reducers/user';
+import { LOG_IN_REQUEST } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -27,7 +27,10 @@ const LoginForm = () => {
   }, [logInError]);
 
   const onSubmitForm = useCallback(() => {
-    dispatch(logInAction({ email, password }));
+    dispatch({
+      type: LOG_IN_REQUEST,
+      data: { email, password },
+    });
   }, [email, password]);
 
   return (

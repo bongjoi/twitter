@@ -14,21 +14,31 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
-import { REMOVE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, REMOVE_POST_REQUEST } from '../reducers/post';
 
 const PostCardBlock = styled.div`
   margin-bottom: 20px;
 `;
 
 const PostCard = ({ post }) => {
-  const [toggleLike, setToggleLike] = useState(false);
-  const [toggleComment, setToggleComment] = useState(false);
   const id = useSelector((state) => state.user.me?.id);
   const { removePostLoading } = useSelector((state) => state.post);
   const dispatch = useDispatch();
+  const [toggleComment, setToggleComment] = useState(false);
+  const liked = post.Likers.find((v) => v.id === id);
 
-  const onToggleLike = useCallback(() => {
-    setToggleLike((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+
+  const onUnlike = useCallback(() => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
 
   const onToggleComment = useCallback(() => {
@@ -48,10 +58,10 @@ const PostCard = ({ post }) => {
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
-          toggleLike ? (
-            <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={onToggleLike} />
+          liked ? (
+            <HeartTwoTone twoToneColor="#eb2f96" key="heart" onClick={onUnlike} />
           ) : (
-            <HeartOutlined key="heart" onClick={onToggleLike} />
+            <HeartOutlined key="heart" onClick={onLike} />
           ),
           <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover
@@ -115,7 +125,8 @@ PostCard.propTypes = {
     }),
     Images: PropTypes.arrayOf(PropTypes.object),
     Comments: PropTypes.arrayOf(PropTypes.object),
-    createdAt: PropTypes.object,
+    Likers: PropTypes.arrayOf(PropTypes.object),
+    createdAt: PropTypes.string,
   }).isRequired,
 };
 

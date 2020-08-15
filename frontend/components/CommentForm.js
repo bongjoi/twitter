@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { addCommentAction } from '../reducers/post';
+import { ADD_COMMENT_REQUEST } from '../reducers/post';
 
 const FormItem = styled(Form.Item)`
   position: relative;
@@ -30,9 +30,12 @@ const CommentForm = ({ post }) => {
 
   const onSubmitComment = useCallback(() => {
     if (commentText) {
-      dispatch(addCommentAction({ content: commentText, postId: post.id, userId: id }));
+      dispatch({
+        type: ADD_COMMENT_REQUEST,
+        data: { content: commentText, postId: post.id, userId: id },
+      });
     }
-  }, [commentText, id]);
+  }, [commentText, post.id, id]);
 
   return (
     <Form onFinish={onSubmitComment}>

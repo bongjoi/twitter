@@ -6,7 +6,7 @@ import { Form, Input, Checkbox, Button } from 'antd';
 import styled from 'styled-components';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
-import { signUpAction } from '../reducers/user';
+import { SIGN_UP_REQUEST } from '../reducers/user';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -67,8 +67,10 @@ const Signup = () => {
       setTermError(true);
       return;
     }
-    console.log(email, nickname, password);
-    dispatch(signUpAction({ email, nickname, password }));
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, nickname, password },
+    });
   }, [password, passwordConfirm, term]);
 
   return (

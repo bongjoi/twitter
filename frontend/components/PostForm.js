@@ -2,8 +2,8 @@ import React, { useCallback, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
-import { addPostAction } from '../reducers/post';
 import useInput from '../hooks/useInput';
+import { ADD_POST_REQUEST } from '../reducers/post';
 
 const StyledForm = styled(Form)`
   margin: 10px 0 20px;
@@ -39,7 +39,10 @@ const PostForm = () => {
   }, []);
 
   const onSubmit = useCallback(() => {
-    dispatch(addPostAction(text));
+    dispatch({
+      type: ADD_POST_REQUEST,
+      data: text,
+    });
   }, [text]);
 
   return (
