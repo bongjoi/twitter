@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { List, Button, Card } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { UNFOLLOW_REQUEST, REMOVE_FOLLOWER_REQUEST } from '../reducers/user';
 
 const ListWrapper = styled(List)`
   margin-bottom: 20px;
@@ -18,6 +20,22 @@ const ListItem = styled(List.Item)`
 `;
 
 const FollowList = ({ header, data }) => {
+  const dispatch = useDispatch();
+
+  const onCancel = (id) => () => {
+    if (header === '팔로잉') {
+      dispatch({
+        type: UNFOLLOW_REQUEST,
+        data: id,
+      });
+    } else {
+      dispatch({
+        type: REMOVE_FOLLOWER_REQUEST,
+        data: id,
+      });
+    }
+  };
+
   return (
     <ListWrapper
       header={<div>{header}</div>}
@@ -32,7 +50,7 @@ const FollowList = ({ header, data }) => {
       dataSource={data}
       renderItem={(item) => (
         <ListItem>
-          <Card actions={[<StopOutlined key="stop" />]}>
+          <Card actions={[<StopOutlined key="stop" onClick={onCancel(item.id)} />]}>
             <Card.Meta description={item.nickname} />
           </Card>
         </ListItem>
