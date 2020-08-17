@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { List, Button, Card } from 'antd';
@@ -22,19 +22,22 @@ const ListItem = styled(List.Item)`
 const FollowList = ({ header, data }) => {
   const dispatch = useDispatch();
 
-  const onCancel = (id) => () => {
-    if (header === '팔로잉') {
-      dispatch({
-        type: UNFOLLOW_REQUEST,
-        data: id,
-      });
-    } else {
-      dispatch({
-        type: REMOVE_FOLLOWER_REQUEST,
-        data: id,
-      });
-    }
-  };
+  const onCancel = useCallback(
+    (id) => () => {
+      if (header === '팔로잉') {
+        dispatch({
+          type: UNFOLLOW_REQUEST,
+          data: id,
+        });
+      } else {
+        dispatch({
+          type: REMOVE_FOLLOWER_REQUEST,
+          data: id,
+        });
+      }
+    },
+    [],
+  );
 
   return (
     <ListWrapper

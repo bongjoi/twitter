@@ -19,6 +19,7 @@
     "jsx-a11y/anchor-is-valid": "off",
     "no-console": "off",
     "no-underscore-dangle": "off",
+    "no-constant-condition": "off",
     "react/forbid-prop-types": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-one-expression-per-line": "off",
@@ -28,6 +29,7 @@
     "no-param-reassign": "off",
     "arrow-body-style": "off",
     "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "consistent-return": "off"
   }
 }

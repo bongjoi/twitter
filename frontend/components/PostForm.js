@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
-import { ADD_POST_REQUEST } from '../reducers/post';
+import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
 
 const StyledForm = styled(Form)`
   margin: 10px 0 20px;
@@ -39,11 +39,47 @@ const PostForm = () => {
   }, []);
 
   const onSubmit = useCallback(() => {
+    if (!text || !text.trim()) {
+      return alert('게시글을 작성하세요.');
+    }
+
+    const formData = new FormData();
+
+    imagePaths.forEach((p) => {
+      formData.append('image', p);
+    });
+    formData.append('content', text);
+
     dispatch({
       type: ADD_POST_REQUEST,
-      data: text,
+      data: formData,
     });
-  }, [text]);
+  }, [text, imagePaths]);
+
+  const onChangeImages = useCallback((e) => {
+    const { files } = e.target;
+    const imageFormData = new FormData();
+    const it = files[Symbol.iterator]();
+    while (true) {
+      const result = it.next();
+      if (result.done) break;
+      imageFormData.append('image', result.value);
+    }
+    dispatch({
+      type: UPLOAD_IMAGES_REQUEST,
+      data: imageFormData,
+    });
+  }, []);
+
+  const onRemoveImage = useCallback(
+    (index) => () => {
+      dispatch({
+        type: REMOVE_IMAGE,
+        data: index,
+      });
+    },
+    [],
+  );
 
   return (
     <StyledForm encType="multipart/form-data" onFinish={onSubmit}>
@@ -54,18 +90,26 @@ const PostForm = () => {
         placeholder="어떤 신기한 일이 있었나요?"
       />
       <div>
-        <input type="file" multiple hidden ref={imageInput} />
+        <input
+          type="file"
+          name="image"
+          multiple
+          hidden
+          ref={imageInput}
+          onChange={onChangeImages}
+          key={imagePaths.join()}
+        />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <StyledButton type="primary" htmlType="submit" loading={addPostLoading}>
           트윗
         </StyledButton>
       </div>
       <div>
-        {imagePaths.map((v) => (
+        {imagePaths.map((v, i) => (
           <ImagePreviewWrapper key={v}>
-            <ImagePreview src={v} alt={v} />
+            <ImagePreview src={`http://localhost:4000/${v}`} alt={v} />
             <div>
-              <Button>제거</Button>
+              <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
           </ImagePreviewWrapper>
         ))}
