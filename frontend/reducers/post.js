@@ -21,6 +21,9 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 export const initialState = {
@@ -45,6 +48,9 @@ export const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  retweetLoading: false,
+  retweetDone: false,
+  retweetError: null,
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
@@ -160,6 +166,20 @@ const postReducer = produce((draft, action) => {
     case ADD_COMMENT_FAILURE:
       draft.addCommentLoading = false;
       draft.addCommentError = action.error;
+      break;
+    case RETWEET_REQUEST:
+      draft.retweetLoading = true;
+      draft.retweetDone = false;
+      draft.retweetError = null;
+      break;
+    case RETWEET_SUCCESS:
+      draft.retweetLoading = false;
+      draft.retweetDone = true;
+      draft.mainPosts.unshift(action.data);
+      break;
+    case RETWEET_FAILURE:
+      draft.retweetLoading = false;
+      draft.retweetError = action.error;
       break;
     default:
       break;

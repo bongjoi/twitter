@@ -7,13 +7,22 @@ import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 
 const Home = () => {
-  const { me, mainPosts, hasMorePosts, loadPostsLoading } = useSelector(({ user, post }) => ({
-    me: user.me,
-    mainPosts: post.mainPosts,
-    hasMorePosts: post.hasMorePosts,
-    loadPostsLoading: post.loadPostsLoading,
-  }));
+  const { me, mainPosts, hasMorePosts, loadPostsLoading, retweetError } = useSelector(
+    ({ user, post }) => ({
+      me: user.me,
+      mainPosts: post.mainPosts,
+      hasMorePosts: post.hasMorePosts,
+      loadPostsLoading: post.loadPostsLoading,
+      retweetError: post.retweetError,
+    }),
+  );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (retweetError) {
+      alert(retweetError);
+    }
+  }, [retweetError]);
 
   useEffect(() => {
     dispatch({

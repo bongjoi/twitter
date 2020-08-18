@@ -50,7 +50,7 @@ const PostForm = () => {
     });
     formData.append('content', text);
 
-    dispatch({
+    return dispatch({
       type: ADD_POST_REQUEST,
       data: formData,
     });
