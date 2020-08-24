@@ -47,6 +47,7 @@ app.use(passport.session());
 app.use('/post', require('./routes/post'));
 app.use('/posts', require('./routes/posts'));
 app.use('/user', require('./routes/user'));
+app.use('/hashtag', require('./routes/hashtag'));
 
 app.listen(4000, () => {
   console.log('Listening to port 4000');
