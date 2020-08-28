@@ -272,7 +272,7 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {
 // 좋아요 활성화
 router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
-    const post = await Post.findOne({ whrere: { id: req.params.postId } });
+    const post = await Post.findOne({ where: { id: req.params.postId } });
     if (!post) {
       return res.status(403).send('게시글이 존재하지 않습니다.');
     }
@@ -288,7 +288,7 @@ router.patch('/:postId/like', isLoggedIn, async (req, res, next) => {
 // 좋아요 비활성화
 router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
   try {
-    const post = await Post.findOne({ whrere: { id: req.params.postId } });
+    const post = await Post.findOne({ where: { id: req.params.postId } });
     if (!post) {
       return res.status(403).send('게시글이 존재하지 않습니다.');
     }
