@@ -11,6 +11,7 @@ import {
   EllipsisOutlined,
 } from '@ant-design/icons';
 import styled from 'styled-components';
+import moment from 'moment';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
@@ -22,8 +23,14 @@ import {
   RETWEET_REQUEST,
 } from '../reducers/post';
 
+moment.locale('ko');
+
 const PostCardBlock = styled.div`
   margin-bottom: 20px;
+
+  .date {
+    float: right;
+  }
 `;
 
 const PostCard = ({ post }) => {
@@ -115,6 +122,7 @@ const PostCard = ({ post }) => {
       >
         {post.Retweet && post.RetweetId ? (
           <Card cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}>
+            <div className="date">{moment(post.createdAt).fromNow()}</div>
             <Card.Meta
               avatar={
                 <Link href={`/user/${post.Retweet.User.id}`}>
@@ -128,17 +136,20 @@ const PostCard = ({ post }) => {
             />
           </Card>
         ) : (
-          <Card.Meta
-            avatar={
-              <Link href={`/user/${post.User.id}`}>
-                <a>
-                  <Avatar>{post.User.nickname[0]}</Avatar>
-                </a>
-              </Link>
-            }
-            title={post.User.nickname}
-            description={<PostCardContent postData={post.content} />}
-          />
+          <>
+            <div className="date">{moment(post.createdAt).fromNow()}</div>
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.User.id}`}>
+                  <a>
+                    <Avatar>{post.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
+              }
+              title={post.User.nickname}
+              description={<PostCardContent postData={post.content} />}
+            />
+          </>
         )}
       </Card>
       {toggleComment && (
