@@ -1,4 +1,4 @@
-import produce from 'immer';
+import produce from '../utils/produce';
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';

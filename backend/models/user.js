@@ -1,30 +1,36 @@
-module.exports = (sequelize, DataTypes) => {
-  // users 테이블 생성
-  const User = sequelize.define(
-    'User',
-    {
-      // id 는 자동으로 생성
-      email: {
-        type: DataTypes.STRING(30),
-        allowNull: false, // 필수
-        unique: true, // 고유한 값
-      },
-      nickname: {
-        type: DataTypes.STRING(30),
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-    },
-    {
-      charset: 'utf8',
-      collate: 'utf8_general_ci',
-    },
-  );
+const DataTypes = require('sequelize');
+const { Model } = DataTypes;
 
-  User.associate = (db) => {
+module.exports = class User extends Model {
+  static init(sequelize) {
+    return super.init(
+      {
+        // id 는 자동으로 생성
+        email: {
+          type: DataTypes.STRING(30),
+          allowNull: false, // 필수
+          unique: true, // 고유한 값
+        },
+        nickname: {
+          type: DataTypes.STRING(30),
+          allowNull: false,
+        },
+        password: {
+          type: DataTypes.STRING(100),
+          allowNull: false,
+        },
+      },
+      {
+        modelName: 'User',
+        tableName: 'users',
+        charset: 'utf8',
+        collate: 'utf8_general_ci',
+        sequelize,
+      },
+    );
+  }
+
+  static associate(db) {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
     db.User.belongsToMany(db.Post, { through: 'Like', as: 'Liked' });
@@ -38,7 +44,5 @@ module.exports = (sequelize, DataTypes) => {
       as: 'Followers',
       foreignKey: 'FollowingId',
     });
-  };
-
-  return User;
+  }
 };
