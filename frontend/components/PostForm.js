@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import useInput from '../hooks/useInput';
 import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
-import { backUrl } from '../config/config';
+import backUrl from '../config/config';
 
 const StyledForm = styled(Form)`
   margin: 10px 0 20px;

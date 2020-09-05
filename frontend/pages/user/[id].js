@@ -10,7 +10,7 @@ import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from '../../reducers/user';
 import PostCard from '../../components/PostCard';
 import wrapper from '../../store/configureStore';
 import AppLayout from '../../components/AppLayout';
-import { backUrl } from '../../config/config';
+import backUrl from '../../config/config';
 
 const User = () => {
   const router = useRouter();
