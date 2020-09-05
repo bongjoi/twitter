@@ -9,6 +9,7 @@ import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 import { LOAD_POST_REQUEST } from '../../reducers/post';
 import AppLayout from '../../components/AppLayout';
 import PostCard from '../../components/PostCard';
+import { backUrl } from '../../config/config';
 
 const Post = () => {
   const router = useRouter();
@@ -27,11 +28,9 @@ const Post = () => {
         <meta property="og:description" content={singlePost.content} />
         <meta
           property="og:image"
-          content={
-            singlePost.Images[0] ? singlePost.Images[0].src : 'http://localhost:4000/favicon.ico'
-          }
+          content={singlePost.Images[0] ? singlePost.Images[0].src : `${backUrl}/favicon.ico`}
         />
-        <meta property="og:url" content={`http://localhost:4000/post/${id}`} />
+        <meta property="og:url" content={`${backUrl}/post/${id}`} />
       </Head>
       <PostCard post={singlePost} />
     </AppLayout>

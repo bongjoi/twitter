@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'http://52.79.236.203'],
     credentials: true,
   }),
 );
@@ -58,6 +58,6 @@ app.use('/posts', require('./routes/posts'));
 app.use('/user', require('./routes/user'));
 app.use('/hashtag', require('./routes/hashtag'));
 
-app.listen(4000, () => {
-  console.log('Listening to port 4000');
+app.listen(80, () => {
+  console.log('Listening to port 80');
 });
