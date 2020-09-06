@@ -10,7 +10,6 @@ import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from '../../reducers/user';
 import PostCard from '../../components/PostCard';
 import wrapper from '../../store/configureStore';
 import AppLayout from '../../components/AppLayout';
-import backUrl from '../../config/config';
 
 const User = () => {
   const router = useRouter();
@@ -47,8 +46,8 @@ const User = () => {
         <meta name="description" content={`${userInfo.nickname}님의 게시글`} />
         <meta property="og:title" content={`${userInfo.nickname}님의 게시글`} />
         <meta property="og:description" content={`${userInfo.nickname}님의 게시글`} />
-        <meta property="og:image" content={`${backUrl}/favicon.ico`} />
-        <meta property="og:url" content={`${backUrl}/user/${id}`} />
+        <meta property="og:image" content="https://bongjoi-twitter.ga/favicon.ico" />
+        <meta property="og:url" content={`https://bongjoi-twitter.ga/user/${id}`} />
       </Head>
       {userInfo ? (
         <Card
