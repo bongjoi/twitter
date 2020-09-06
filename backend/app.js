@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'http://52.79.236.203'],
+    origin: ['http://localhost:3000', 'http://bongjoi-twitter.ga'],
     credentials: true,
   }),
 );
@@ -47,6 +47,11 @@ app.use(
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      domain: process.env.NODE_ENV === 'production' && '.bongjoi-twitter.ga',
+    },
   }),
 );
 app.use(passport.initialize());

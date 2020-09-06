@@ -1,2 +1,2 @@
-const backUrl = 'http://54.180.86.18';
+const backUrl = 'http://api.bongjoi-twitter.ga';
 export { backUrl as default };
