@@ -100,7 +100,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 // POST /post/images
 // 이미지 파일 업로드
 router.post('/images', isLoggedIn, upload.array('image'), async (req, res, next) => {
-  res.json(req.files.map((v) => v.location));
+  res.json(req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')));
 });
 
 // POST /post/:postId/comment
