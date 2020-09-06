@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PlusOutlined } from '@ant-design/icons';
 import ImagesZoom from './ImagesZoom';
-import backUrl from '../config/config';
 
 const ShowMoreImages = styled.div`
   display: inline-block;
@@ -32,12 +31,7 @@ const PostImages = ({ images }) => {
   if (images.length === 1) {
     return (
       <>
-        <img
-          role="presentation"
-          src={`${backUrl}/${images[0].src}`}
-          alt={images[0].src}
-          onClick={onZoom}
-        />
+        <img role="presentation" src={images[0].src} alt={images[0].src} onClick={onZoom} />
         {showImageZoom && <ImagesZoom images={images} onClose={onClose} />}
       </>
     );
@@ -47,13 +41,13 @@ const PostImages = ({ images }) => {
       <>
         <HalfWidthImage
           role="presentation"
-          src={`${backUrl}/${images[0].src}`}
+          src={images[0].src}
           alt={images[0].src}
           onClick={onZoom}
         />
         <HalfWidthImage
           role="presentation"
-          src={`${backUrl}/${images[1].src}`}
+          src={images[1].src}
           alt={images[1].src}
           onClick={onZoom}
         />
@@ -66,7 +60,7 @@ const PostImages = ({ images }) => {
       <div>
         <HalfWidthImage
           role="presentation"
-          src={`${backUrl}/${images[0].src}`}
+          src={images[0].src}
           alt={images[0].src}
           onClick={onZoom}
         />
