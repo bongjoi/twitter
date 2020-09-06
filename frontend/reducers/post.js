@@ -164,7 +164,7 @@ const postReducer = produce((draft, action) => {
     case UPLOAD_IMAGES_SUCCESS:
       draft.uploadImagesLoading = false;
       draft.uploadImagesDone = true;
-      draft.imagePaths = action.data;
+      draft.imagePaths = draft.imagePaths.concat(action.data);
       break;
     case UPLOAD_IMAGES_FAILURE:
       draft.uploadImagesLoading = false;
