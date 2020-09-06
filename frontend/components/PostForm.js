@@ -107,7 +107,7 @@ const PostForm = () => {
       <div>
         {imagePaths.map((v, i) => (
           <ImagePreviewWrapper key={v}>
-            <ImagePreview src={v} alt={v} />
+            <ImagePreview src={v.replace(/\/thumb\//, '/original/')} alt={v} />
             <div>
               <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
