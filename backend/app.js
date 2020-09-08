@@ -24,6 +24,7 @@ db.sequelize
 
 passportConfig();
 
+app.set('trust proxy', 1);
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(
@@ -53,6 +54,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    proxy: true,
     cookie: {
       httpOnly: true,
       secure: false,
