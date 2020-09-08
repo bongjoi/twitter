@@ -24,12 +24,12 @@ db.sequelize
 
 passportConfig();
 
-app.set('trust proxy', 1);
 if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
   app.use(morgan('combined'));
   app.use(
     cors({
-      origin: 'http://bongjoi-twitter.ga',
+      origin: 'https://bongjoi-twitter.ga',
       credentials: true,
     }),
   );
@@ -57,7 +57,7 @@ app.use(
     proxy: true,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: true,
       domain: process.env.NODE_ENV === 'production' && '.bongjoi-twitter.ga',
     },
   }),
@@ -65,12 +65,16 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/', (req, res) => {
+  res.send('Hello express!');
+});
+
 // Routes
 app.use('/post', require('./routes/post'));
 app.use('/posts', require('./routes/posts'));
 app.use('/user', require('./routes/user'));
 app.use('/hashtag', require('./routes/hashtag'));
 
-app.listen(80, () => {
-  console.log('Listening to port 80');
+app.listen(4000, () => {
+  console.log('서버 실행중...');
 });
