@@ -1,16 +1,16 @@
 const AWS = require('aws-sdk');
 const sharp = require('sharp');
 
-const s3 = new AWS.s3();
+const s3 = new AWS.S3();
 
 exports.handler = async (event, context, callback) => {
   const Bucket = event.Records[0].s3.bucket.name; // bongjoi-twitter-s3
-  const Key = event.Records[0].s3.object.key;
-  console.log('Bucket: ', Bucket, 'Key: ', Key);
+  const Key = event.Records[0].s3.object.key; // original/12312312_abc.png
+  console.log(Bucket, Key);
   const filename = Key.split('/')[Key.split('/').length - 1];
   const ext = Key.split('.')[Key.split('.').length - 1];
   const requiredFormat = ext === 'jpg' ? 'jpeg' : ext;
-  console.log('filename: ', filename, 'ext: ', ext);
+  console.log('filename', filename, 'ext', ext);
 
   try {
     const s3Object = await s3.getObject({ Bucket, Key }).promise();
