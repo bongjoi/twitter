@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { END } from 'redux-saga';
 import { Avatar, Card } from 'antd';
+import styled from 'styled-components';
 import axios from 'axios';
 import { LOAD_USER_POSTS_REQUEST } from '../../reducers/post';
 import { LOAD_MY_INFO_REQUEST, LOAD_USER_REQUEST } from '../../reducers/user';
@@ -11,10 +12,14 @@ import PostCard from '../../components/PostCard';
 import wrapper from '../../store/configureStore';
 import AppLayout from '../../components/AppLayout';
 
+const CardBlock = styled(Card)`
+  margin-bottom: 20px;
+`;
+
 const User = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, me } = useSelector((state) => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
   const dispatch = useDispatch();
 
@@ -49,8 +54,8 @@ const User = () => {
         <meta property="og:image" content="https://bongjoi-twitter.ga/favicon.ico" />
         <meta property="og:url" content={`https://bongjoi-twitter.ga/user/${id}`} />
       </Head>
-      {userInfo ? (
-        <Card
+      {userInfo && userInfo.id !== me?.id ? (
+        <CardBlock
           actions={[
             <div key="twit">
               트윗
@@ -70,7 +75,7 @@ const User = () => {
           ]}
         >
           <Card.Meta avatar={<Avatar>{userInfo.nickname[0]}</Avatar>} title={userInfo.nickname} />
-        </Card>
+        </CardBlock>
       ) : null}
       {mainPosts.map((c) => (
         <PostCard key={c.id} post={c} />
