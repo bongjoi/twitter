@@ -303,6 +303,39 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
   }
 });
 
+// PATCH /post/:postId
+// 게시글 수정
+router.patch('/:postId', isLoggedIn, async (req, res, next) => {
+  const hashtags = req.body.content.match(/#[^\s#]+/g);
+  try {
+    const post = await Post.update(
+      {
+        content: req.body.content,
+      },
+      {
+        where: {
+          id: req.params.postId,
+          UserId: req.user.id,
+        },
+      },
+    );
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({
+            where: { name: tag.slice(1).toLowerCase() },
+          }),
+        ),
+      );
+      await post.setHashtags(result.map((v) => v[0]));
+    }
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10), content: req.body.content });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // DELETE /post/:postId
 // 게시글 삭제
 router.delete('/:postId', isLoggedIn, async (req, res, next) => {
